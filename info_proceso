@@ -1,0 +1,46 @@
+#!/bin/bash|
+
+# Verificación del argumento (PID)
+
+if [ -z "$1" ]; then
+  echo "Proporcione el ID de un proceso"
+  exit 1
+fi
+
+PID=$1
+
+# Nombre del proceso
+
+NOMBRE_PROCESO=$(ps -p $PID -o comm=)
+
+# ID del proceso
+ID_PROCESO=$PID
+
+# Parent Process ID (PPID)
+PPID=$(ps -p $PID -o ppid=)
+
+# Usuario propietario
+PROPIETARIO=$(ps -p $PID -o user=)
+
+# Porcentaje de uso de CPU
+CPU_USO=$(ps -p $PID -o %cpu=)
+
+# Consumo de memoria (en porcentaje)
+USO_MEMORIA=$(ps -p $PID -o %mem=)
+
+# Estado (status)
+ESTADO=$(ps -p $PID -o stat=)
+
+# Path del ejecutable
+PATH_EJECUTABLE=$(readlink -f /proc/$PID/exe)
+
+# Para imprimir la información
+echo "Nombre del proceso: $NOMBRE_PROCESO"
+echo "ID del proceso: $ID_PROCESO"
+echo "Parent Process ID (PPID): $PPID"
+echo "Usuario propietario: $PROPIETARIO"
+echo "Uso de CPU: $CPU_USO%"
+echo "Consumo de memoria: $USO_MEMORIA%"
+echo "Estado: $ESTADO"
+echo "Path del ejecutable: $PATH_EJECUTABLE"
+

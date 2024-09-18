@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Verificar si se proporcionaron los argumentos
+if [ $# -ne 2 ]; then
+  echo "Uso: $0 <nombre_proceso> <comando_ejecutable>"
+  exit 1
+fi
+
+NOMBRE_PROCESO=$1
+COMANDO_EJECUTABLE=$2
+
+# Función que verifica si el proceso está corriendo
+check_process() {
+  pgrep -x "$NOMBRE_PROCESO" > /dev/null
+  return $?
+}
+
+# Loop para monitorear el proceso
+while true; do
+  check_process
+  if [ $? -ne 0 ]; then
+    echo "El proceso '$NOMBRE_PROCESO' no está corriendo. Iniciando el proceso..."
+    $COMANDO_EJECUTABLE &
+  else
+    echo "El proceso '$NOMBRE_PROCESO' está corriendo."
+  fi
+  sleep 5
+done
+
